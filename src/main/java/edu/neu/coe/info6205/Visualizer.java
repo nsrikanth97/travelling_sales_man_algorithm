@@ -41,6 +41,8 @@ public class Visualizer extends Application {
             }
         }
 
+        double lengthOfMst = MinimumSpanningTree.generateMST(graph, 0);
+
     }
 
     public static void main(String[] args) {
