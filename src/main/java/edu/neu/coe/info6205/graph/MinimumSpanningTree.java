@@ -67,10 +67,11 @@ public class MinimumSpanningTree {
             sb.append(end.getLat()).append(",").append(end.getLong()).append(",");
             sb.append(edge.getWeight()*1000);
             WriteDataToCSV.writeData(sb.toString(),bw);
+            if(null != gc){
             Platform.runLater(() -> {
 
                 gc.strokeLine(startXPoint,startYPoint,endXPoint,endYPoint);
-                label.setText("Length of MST tour : " + finalMstWeight);
+                label.setText("Length of MST tour : " + finalMstWeight*1000);
                 if(degreeS%2 != 0){
                     gc.setFill(Color.RED);
                     gc.fillOval(startXPoint, startYPoint, 5, 5);
@@ -94,6 +95,18 @@ public class MinimumSpanningTree {
                     g.removeNodeFromOddDegreeList(end);
                 }
             });
+            }else{
+                if(degreeS%2 != 0){
+                    g.addNodeToOddDegreeList(start);
+                }else{
+                    g.removeNodeFromOddDegreeList(start);
+                }
+                if(degreeE%2 != 0){
+                    g.addNodeToOddDegreeList(end);
+                }else{
+                    g.removeNodeFromOddDegreeList(end);
+                }
+            }
             visited[edge.getV()] = true;
             for(int i= 0 ; i < g.getSize(); i++){
                 if(!visited[i])

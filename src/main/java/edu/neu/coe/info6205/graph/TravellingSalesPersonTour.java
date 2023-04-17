@@ -94,7 +94,7 @@ public class TravellingSalesPersonTour {
                 Platform.runLater(() -> {
                     gc.setStroke(Color.BLACK);
                     gc.strokeLine(finalStartPointX, finalStartPointY, finalEndPointX, finalEndPointY);
-                    l.setText("Length of TSP tour : " + finalTspWeight);
+                    l.setText("Christofides  tour length (Black Line):" + finalTspWeight *1000);
                 });
                 startPointX = endPointX;
                 startPointY = endPointY;

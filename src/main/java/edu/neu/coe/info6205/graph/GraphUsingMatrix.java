@@ -119,5 +119,17 @@ public class GraphUsingMatrix implements Graph {
         this.adjList = adjList;
     }
 
+    public void addAllEdges(){
+        for(int i= 0; i < this.getSize() ; i++){
+            for(int j=0; j< this.getSize() ; j++){
+                this.addEdge(i,j);
+            }
+        }
+    }
+
+    public List<Node> getNodeList(){
+        return nodeList;
+    }
+
 
 }

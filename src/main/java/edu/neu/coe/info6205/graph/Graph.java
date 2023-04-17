@@ -38,4 +38,7 @@ public interface  Graph{
 
     void setPheromoneMatrix(double[][] pheromoneMatrix);
 
+    void addAllEdges();
+
+    List<Node> getNodeList();
 }
