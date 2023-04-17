@@ -19,7 +19,8 @@ import java.util.Queue;
 public class MinimumSpanningTree {
 
     public static double generateMST(Graph g, int S, GraphicsContext gc, Label label){
-
+        long timeStart = System.currentTimeMillis();
+        System.out.printf("MST generation Started at %d", timeStart);
         Queue<Edge> queue = new PriorityQueue<>((o1, o2) -> Double.compare(o1.getWeight(), o2.getWeight()));
         double mstWeight = 0;
         List<Edge> mst = new ArrayList<>();
@@ -66,8 +67,6 @@ public class MinimumSpanningTree {
             sb.append(end.getLat()).append(",").append(end.getLong()).append(",");
             sb.append(edge.getWeight()*1000);
             WriteDataToCSV.writeData(sb.toString(),bw);
-//            System.out.println(edge.getU() +" " +edge.getV() + " " + edge.getWeight());
-
             Platform.runLater(() -> {
 
                 gc.strokeLine(startXPoint,startYPoint,endXPoint,endYPoint);
@@ -106,6 +105,14 @@ public class MinimumSpanningTree {
         }
         WriteDataToCSV.closeStream(bw);
         g.setAdjList(adjList);
+        System.out.println();
+        System.out.printf("Length of MST : %f , MST tour : - ",mstWeight);
+        System.out.println();
+        System.out.println("Details of the MST tour can be found in the mst_path.csv file");
+        long timeEnd = System.currentTimeMillis();
+        System.out.printf("MST generation Successfully completed  at %d(ms)", timeEnd);
+        System.out.println();
+        System.out.printf("Time for generating MST :  %d (ms)", timeEnd-timeStart);
         return mstWeight;
     }
 }
