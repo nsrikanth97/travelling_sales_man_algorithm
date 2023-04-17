@@ -4,6 +4,7 @@ import edu.neu.coe.info6205.entity.TspTour;
 import edu.neu.coe.info6205.graph.*;
 import edu.neu.coe.info6205.util.ReadDataFromCSV;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -65,11 +66,14 @@ public class Visualizer extends Application {
         }
         Timer timer = new Timer(1000, null);
         timer.addActionListener((e) -> {
-            double lengthOfMstt = MinimumSpanningTree.generateMST(graph, 0, gc, label);
-            MinimumWeightMatching.findMinimumWeightMatching(graph);
-            TspTour tspTour = TravellingSalesPersonTour.findTravellingSalesPersonTour(graph,0);
+            double lengthOfMst = MinimumSpanningTree.generateMST(graph, 0, gc, label);
+            MinimumWeightMatching.findMinimumWeightMatching(graph, gc);
+            TspTour tspTour = TravellingSalesPersonTour.findTravellingSalesPersonTour(graph,0,gc,label2);
             double tspTourL = tspTour.getLength();
             System.out.println(tspTourL);
+            Platform.runLater(() -> {
+                label3.setText("Percentage difference :" + ((tspTourL / lengthOfMst) - 1) * 100);
+            });
 
             timer.stop();
         });

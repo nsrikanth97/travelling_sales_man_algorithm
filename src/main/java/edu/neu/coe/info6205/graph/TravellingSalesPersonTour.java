@@ -1,12 +1,16 @@
 package edu.neu.coe.info6205.graph;
 
 import edu.neu.coe.info6205.entity.TspTour;
+import javafx.application.Platform;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 
 import java.util.*;
 
 public class TravellingSalesPersonTour {
 
-    public static TspTour findTravellingSalesPersonTour(Graph g, int start) {
+    public static TspTour findTravellingSalesPersonTour(Graph g, int start, GraphicsContext gc, Label l) {
         List<List<Integer>> adjList = g.getAdjList();
         int n = adjList.size();
         List<Integer> tour = new ArrayList<>();
@@ -18,10 +22,40 @@ public class TravellingSalesPersonTour {
         TspTour tspTour = new TspTour();
 
         stack.push(start);
+        double startPointX =-1;
+        double startPointY =-1;
+        double endPointX = -1;
+        double endPointY = -1;
         double tspWeight = 0.0;
+
         while (!stack.isEmpty()) {
             int v = stack.peek();
             if (degree[v] == 0) {
+                if(tour.size() == 0){
+                    startPointX = g.getXPoint(v);
+                    startPointY = g.getYPoint(v);
+                }else{
+                    endPointX = g.getXPoint(v);
+                    endPointY = g.getYPoint(v);
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+
+                    double finalStartPointX = startPointX;
+                    double finalStartPointY = startPointY;
+                    double finalEndPointX = endPointX;
+                    double finalEndPointY = endPointY;
+
+                    Platform.runLater(() -> {
+                        gc.setStroke(Color.BLUE);
+                        gc.strokeLine(finalStartPointX, finalStartPointY, finalEndPointX, finalEndPointY);
+
+                    });
+                    startPointX = endPointX;
+                    startPointY = endPointY;
+                }
                 tour.add(v);
                 stack.pop();
             } else {
@@ -32,6 +66,8 @@ public class TravellingSalesPersonTour {
             }
         }
         boolean[] visited = new  boolean[n];
+        startPointX = g.getXPoint(start);
+        startPointY = g.getYPoint(start);
         visited[0] = true;
         List<Integer> tspTourList = new ArrayList<>();
         tspTourList.add(start);
@@ -41,8 +77,27 @@ public class TravellingSalesPersonTour {
             v = tour.get(i);
             if(!visited[v] || i == tour.size()-1){
                 visited[tour.get(i)] = true;
+                endPointX = g.getXPoint(v);
+                endPointY = g.getYPoint(v);
                 tspWeight+=g.getDistanceBetweenPoints(u,v);
                 tspTourList.add(v);
+                double finalStartPointX = startPointX;
+                double finalStartPointY = startPointY;
+                double finalEndPointX = endPointX;
+                double finalEndPointY = endPointY;
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+                double finalTspWeight = tspWeight;
+                Platform.runLater(() -> {
+                    gc.setStroke(Color.BLACK);
+                    gc.strokeLine(finalStartPointX, finalStartPointY, finalEndPointX, finalEndPointY);
+                    l.setText("Length of TSP tour : " + finalTspWeight);
+                });
+                startPointX = endPointX;
+                startPointY = endPointY;
                 u =v;
             }
         }

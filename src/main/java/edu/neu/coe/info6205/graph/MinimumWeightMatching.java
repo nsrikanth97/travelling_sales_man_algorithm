@@ -13,7 +13,7 @@ import java.util.PriorityQueue;
 
 public class MinimumWeightMatching {
 
-    public static List<Edge> findMinimumWeightMatching(Graph g) {
+    public static List<Edge> findMinimumWeightMatching(Graph g,GraphicsContext gc) {
         List<Node> points = g.getOddDegreeList();
         PriorityQueue<Edge> edgeQueue = new PriorityQueue<>(Comparator.comparingDouble(Edge::getWeight));
         boolean[] matched = new boolean[g.getSize()];
@@ -41,12 +41,26 @@ public class MinimumWeightMatching {
                 matching.add(edge);
                 adjList.get(edge.getU()).add(edge.getV());
                 adjList.get(edge.getV()).add(edge.getU());
-
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
+                Node start = g.getNode(edge.getU());
+                Node end = g.getNode(edge.getV());
+                double startXPoint = start.getX();
+                double startYPoint = start.getY();
+                double endXPoint = end.getX();
+                double endYPoint = end.getY();
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+                Platform.runLater(() -> {
+                    gc.setStroke(Color.RED);
+                    gc.strokeLine(startXPoint,startYPoint,endXPoint,endYPoint);
+                });
 
             }
             if(matching.size() == points.size()/2)
