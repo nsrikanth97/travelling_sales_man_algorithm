@@ -2,7 +2,6 @@ package edu.neu.coe.info6205.graph;
 
 import edu.neu.coe.info6205.entity.Node;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface  Graph{
@@ -21,15 +20,15 @@ public interface  Graph{
 
     double getYPoint(int i);
 
-    void addNodeToDegreeList(Node node);
+    void addNodeToOddDegreeList(Node node);
 
-    void removeNodeToDegreeList(Node node);
+    void removeNodeFromOddDegreeList(Node node);
 
-    int sizeOfDegreeNodes();
+    int sizeOfOddDegreeNodes();
 
     double[][] getAdjMatrix();
 
-    List<Node> getDegreeGreaterList();
+    List<Node> getOddDegreeList();
 
     List<List<Integer>> getAdjList();
 

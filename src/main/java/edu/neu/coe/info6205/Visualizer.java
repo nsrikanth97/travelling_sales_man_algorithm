@@ -3,6 +3,7 @@ package edu.neu.coe.info6205;
 import edu.neu.coe.info6205.graph.Graph;
 import edu.neu.coe.info6205.graph.GraphUsingMatrix;
 import edu.neu.coe.info6205.graph.MinimumSpanningTree;
+import edu.neu.coe.info6205.graph.MinimumWeightMatching;
 import edu.neu.coe.info6205.util.ReadDataFromCSV;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
@@ -64,14 +65,13 @@ public class Visualizer extends Application {
                 graph.addEdge(i, j);
             }
         }
-
-        double lengthOfMst = MinimumSpanningTree.generateMST(graph, 0,gc,label);
-
         Timer timer = new Timer(1000, null);
         timer.addActionListener((e) -> {
             double lengthOfMstt = MinimumSpanningTree.generateMST(graph, 0, gc, label);
+            MinimumWeightMatching.findMinimumWeightMatching(graph);
             timer.stop();
         });
+        timer.start();
 
     }
 

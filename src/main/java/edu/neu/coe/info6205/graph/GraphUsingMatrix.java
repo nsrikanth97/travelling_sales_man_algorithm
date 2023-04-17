@@ -10,7 +10,7 @@ public class GraphUsingMatrix implements Graph {
     private int V;
     private List<Node> nodeList;
 
-    private List<Node> degreeGreater;
+    private List<Node> oddDegreeNodes;
     private double[][] adjMatrix;
 
     public double[][] getPheromoneMatrix() {
@@ -29,7 +29,7 @@ public class GraphUsingMatrix implements Graph {
     public GraphUsingMatrix(int V){
         this.V = V;
         nodeList = new ArrayList<>();
-        degreeGreater = new ArrayList<>();
+        oddDegreeNodes = new ArrayList<>();
         adjMatrix = new double[V][V];
         pheromoneMatrix = new double[V][V];
         adjList = new ArrayList<>();
@@ -88,15 +88,15 @@ public class GraphUsingMatrix implements Graph {
         return this.adjMatrix[u][v];
     }
 
-    public void addNodeToDegreeList(Node node){
-        this.degreeGreater.add(node);
+    public void addNodeToOddDegreeList(Node node){
+        this.oddDegreeNodes.add(node);
     }
 
-    public void removeNodeToDegreeList(Node node){
-        this.degreeGreater.remove(node);
+    public void removeNodeFromOddDegreeList(Node node){
+        this.oddDegreeNodes.remove(node);
     }
-    public int sizeOfDegreeNodes(){
-        return this.degreeGreater.size();
+    public int sizeOfOddDegreeNodes(){
+        return this.oddDegreeNodes.size();
     }
 
     public double[][] getAdjMatrix() {
@@ -107,8 +107,8 @@ public class GraphUsingMatrix implements Graph {
         this.adjMatrix = adjMatrix;
     }
 
-    public List<Node> getDegreeGreaterList(){
-        return this.degreeGreater;
+    public List<Node> getOddDegreeList(){
+        return this.oddDegreeNodes;
     }
 
     public List<List<Integer>> getAdjList() {

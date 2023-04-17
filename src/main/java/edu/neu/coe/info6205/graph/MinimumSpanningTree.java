@@ -62,23 +62,23 @@ public class MinimumSpanningTree {
                     gc.setFill(Color.RED);
                     gc.fillOval(startXPoint, startYPoint, 5, 5);
                     start.setPos(finalEdge.getU());
-                    g.addNodeToDegreeList(start);
+                    g.addNodeToOddDegreeList(start);
                 }else{
                     gc.setFill(Color.BLACK);
                     gc.fillOval(startXPoint, startYPoint, 5, 5);
                     start.setPos(finalEdge.getU());
-                    g.removeNodeToDegreeList(start);
+                    g.removeNodeFromOddDegreeList(start);
                 }
                 if(degreeE%2 != 0){
                     gc.setFill(Color.RED);
                     gc.fillOval(endXPoint, endYPoint, 5, 5);
                     end.setPos(finalEdge.getV());
-                    g.addNodeToDegreeList(end);
+                    g.addNodeToOddDegreeList(end);
                 }else{
                     gc.setFill(Color.BLACK);
                     gc.fillOval(startXPoint, startYPoint, 5, 5);
                     end.setPos(finalEdge.getV());
-                    g.removeNodeToDegreeList(end);
+                    g.removeNodeFromOddDegreeList(end);
                 }
             });
             visited[edge.getV()] = true;
