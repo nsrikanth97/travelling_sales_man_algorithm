@@ -11,7 +11,7 @@ import java.io.*;
 public class ReadDataFromCSV {
 
 
-    public static Graph readData(String fileName, Graph graph, double width, double height) {
+    public static Graph readData(String fileName, Graph graph,GraphicsContext gc,  double width, double height) {
         try {
             InputStream inputStream = ReadDataFromCSV.class.getResourceAsStream(fileName);
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -26,6 +26,7 @@ public class ReadDataFromCSV {
                 double latitude = Double.parseDouble(fields[2]);
                 double x = longitudeToX(longitude, width);
                 double y = latitudeToY(latitude, height);
+                gc.fillOval(x,y, 5, 5);
                 graph.addNode(new Node(fields[0], latitude, longitude,x,y));
 
             }
