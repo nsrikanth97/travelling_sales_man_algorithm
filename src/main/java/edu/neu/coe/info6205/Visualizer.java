@@ -1,23 +1,11 @@
 package edu.neu.coe.info6205;
 
-import edu.neu.coe.info6205.entity.Node;
-import edu.neu.coe.info6205.entity.TspTour;
-import edu.neu.coe.info6205.graph.*;
-import edu.neu.coe.info6205.optimization.AntColonyOptimization;
-import edu.neu.coe.info6205.optimization.RandomSwapping;
-import edu.neu.coe.info6205.optimization.ThreeOpt;
-import edu.neu.coe.info6205.optimization.TwoOpt;
+import edu.neu.coe.info6205.graph.Graph;
+import edu.neu.coe.info6205.graph.GraphUsingMatrix;
+import edu.neu.coe.info6205.graph.MinimumSpanningTree;
 import edu.neu.coe.info6205.util.ReadDataFromCSV;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
