@@ -126,6 +126,7 @@ public class MinimumSpanningTree {
         System.out.printf("MST generation Successfully completed  at %d(ms)", timeEnd);
         System.out.println();
         System.out.printf("Time for generating MST :  %d (ms)", timeEnd-timeStart);
+        System.out.println();
         return mstWeight;
     }
 }

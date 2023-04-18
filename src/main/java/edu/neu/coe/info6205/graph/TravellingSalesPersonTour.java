@@ -1,18 +1,25 @@
 package edu.neu.coe.info6205.graph;
 
+import edu.neu.coe.info6205.entity.Node;
 import edu.neu.coe.info6205.entity.TspTour;
+import edu.neu.coe.info6205.util.WriteDataToCSV;
 import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 
+import java.io.BufferedWriter;
 import java.util.*;
 
 public class TravellingSalesPersonTour {
 
     public static TspTour findTravellingSalesPersonTour(Graph g, int start, GraphicsContext gc, Label l) {
+        long timeStart = System.currentTimeMillis();
+        System.out.println();
+        System.out.printf("TSP generation using Christofides Started at %d", timeStart);
         List<List<Integer>> adjList = g.getAdjList();
         int n = adjList.size();
+        StringBuilder sb;
         List<Integer> tour = new ArrayList<>();
         Stack<Integer> stack = new Stack<>();
         int[] degree = new int[n];
@@ -20,7 +27,7 @@ public class TravellingSalesPersonTour {
             degree[i] = adjList.get(i).size();
         }
         TspTour tspTour = new TspTour();
-
+        BufferedWriter bw = WriteDataToCSV.createBufferedWriter("tsp_path.csv");
         stack.push(start);
         double startPointX =-1;
         double startPointY =-1;
@@ -71,6 +78,7 @@ public class TravellingSalesPersonTour {
         visited[0] = true;
         List<Integer> tspTourList = new ArrayList<>();
         tspTourList.add(start);
+
         int u = start;
         int v;
         for(int i=1; i< tour.size(); i++){
@@ -80,6 +88,16 @@ public class TravellingSalesPersonTour {
                 endPointX = g.getXPoint(v);
                 endPointY = g.getYPoint(v);
                 tspWeight+=g.getDistanceBetweenPoints(u,v);
+                Node startNode = g.getNode(u);
+                Node endnode = g.getNode(v);
+                sb = new StringBuilder("");
+                sb.append(i+1).append(",");
+                sb.append(u).append("(").append(startNode.getName()).append("),");
+                sb.append(startNode.getLat()).append(",").append(startNode.getLong()).append(",");
+                sb.append(v).append("(").append(endnode.getName()).append("),");
+                sb.append(endnode.getLat()).append(",").append(endnode.getLong()).append(",");
+                sb.append(g.getDistanceBetweenPoints(u,v)*1000);
+                WriteDataToCSV.writeData(sb.toString(), bw);
                 tspTourList.add(v);
                 double finalStartPointX = startPointX;
                 double finalStartPointY = startPointY;
@@ -101,6 +119,17 @@ public class TravellingSalesPersonTour {
                 u =v;
             }
         }
+        WriteDataToCSV.closeStream(bw);
+        System.out.println();
+        System.out.printf("Length of tour after christofides algorithm: %f ",tspWeight*1000);
+        System.out.println();
+        System.out.println("Details of the tour generated after christofides algorithm can be found in the tsp_path.csv file");
+        long timeEnd = System.currentTimeMillis();
+        System.out.printf("TSP generation Successfully completed  at %d(ms)", timeEnd);
+        System.out.println();
+
+        System.out.printf("Time taken for TSP generation :  %d (ms)", timeEnd-timeStart);
+        System.out.println();
         tspTour.setTour(tspTourList);
         tspTour.setLength(tspWeight);
         return tspTour;
