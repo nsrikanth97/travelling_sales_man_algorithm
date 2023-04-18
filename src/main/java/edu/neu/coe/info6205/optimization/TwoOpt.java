@@ -48,7 +48,7 @@ public class TwoOpt {
             sb.append(start.getLat()).append(",").append(start.getLong()).append(",");
             sb.append(end.getPos()).append("(").append(end.getName()).append("),");
             sb.append(end.getLat()).append(",").append(end.getLong()).append(",");
-            sb.append(g.getDistanceBetweenPoints(start.getPos(),end.getPos()));
+            sb.append(g.getDistanceBetweenPoints(start.getPos(),end.getPos())*1000);
             WriteDataToCSV.writeData(sb.toString(), bw);
         }
         WriteDataToCSV.closeStream(bw);
