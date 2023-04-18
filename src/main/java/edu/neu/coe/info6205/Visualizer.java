@@ -6,6 +6,7 @@ import edu.neu.coe.info6205.graph.*;
 import edu.neu.coe.info6205.optimization.RandomSwapping;
 //import edu.neu.coe.info6205.optimization.ThreeOpt;
 import edu.neu.coe.info6205.*;
+import edu.neu.coe.info6205.optimization.SimulatedAnnealing;
 import edu.neu.coe.info6205.optimization.ThreeOpt;
 import edu.neu.coe.info6205.optimization.TwoOpt;
 import edu.neu.coe.info6205.util.ReadDataFromCSV;
@@ -59,6 +60,9 @@ public class Visualizer extends Application {
         Button showThreeOptTour = new Button("Show Three opt Tour");
         showThreeOptTour.setLayoutX(10);
         showThreeOptTour.setLayoutY(110);
+        Button showSATour = new Button("Simulated Annealing Tour");
+        showSATour.setLayoutX(10);
+        showSATour.setLayoutY(130);
         Pane root = new Pane(canvas);
         root.getChildren().add(label);
         root.getChildren().add(label2);
@@ -66,7 +70,7 @@ public class Visualizer extends Application {
         root.getChildren().add(showTwoOptTour);
         root.getChildren().add(showRandomSwappingTour);
         root.getChildren().add(showThreeOptTour);
-        root.getChildren().add(showThreeOptTour);
+        root.getChildren().add(showSATour);
 
 
         Scene scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight());
@@ -90,13 +94,15 @@ public class Visualizer extends Application {
             Platform.runLater(() -> {
                 label3.setText("Percentage difference :" + ((tspTourL / lengthOfMst) - 1) * 100);
             });
-            TspTour randomSwappping = RandomSwapping.randomSwapping(tspTour,graph);
-            System.out.println("Length of Random swapping : " + randomSwappping.getLength()*1000);
+            TspTour randomSwapping = RandomSwapping.randomSwapping(tspTour,graph);
+            System.out.println("Length of Random swapping : " + randomSwapping.getLength()*1000);
 
             TspTour twoOptTour = TwoOpt.twoOpt(tspTour,graph);
             System.out.println("Two opt : " + twoOptTour.getLength());
             TspTour threeOptTour = ThreeOpt.threeOpt(tspTour,graph);
             System.out.println("Three opt : " + threeOptTour.getLength());
+            TspTour simTour = SimulatedAnnealing.simulatedAnnealing(tspTour,100, 0.99,graph);
+            System.out.println("Sim opt : " + simTour.getLength());
             showTwoOptTour.setDisable(false);
             showThreeOptTour.setDisable(false);
             showRandomSwappingTour.setDisable(false);
@@ -145,8 +151,8 @@ public class Visualizer extends Application {
             showRandomSwappingTour.setOnAction(event -> {
                 gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
                 gc.setFill(Color.BLACK);
-                label2.setText("Length of Random swap Tour (RED) : " + randomSwappping.getLength()*1000 );
-                label3.setText("Percentage difference after Random Swap :" + ((randomSwappping.getLength()/lengthOfMst) - 1) * 100);
+                label2.setText("Length of Random swap Tour (RED) : " + randomSwapping.getLength()*1000 );
+                label3.setText("Percentage difference after Random Swap :" + ((randomSwapping.getLength()/lengthOfMst) - 1) * 100);
 
                 for(Node n : graph.getNodeList()){
                     gc.fillOval(n.getX(),n.getY(), 5, 5);
@@ -168,7 +174,7 @@ public class Visualizer extends Application {
                         }
                         // Draw the two-opt tour using RED color
                         gc.setStroke(Color.RED);
-                        tour = randomSwappping.getTour();
+                        tour = randomSwapping.getTour();
                         for(int i=0; i< tour.size()-1;i++){
                             Node start = graph.getNode(tour.get(i));
                             Node end = graph.getNode(tour.get(i+1));
@@ -185,6 +191,50 @@ public class Visualizer extends Application {
                 thread.setDaemon(true);
                 thread.start();
             });
+            showSATour.setOnAction(event -> {
+                gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+                gc.setFill(Color.BLACK);
+                label2.setText("Length of Random swap Tour (RED) : " + simTour.getLength()*1000 );
+                label3.setText("Percentage difference after Random Swap :" + ((simTour.getLength()/lengthOfMst) - 1) * 100);
+
+                for(Node n : graph.getNodeList()){
+                    gc.fillOval(n.getX(),n.getY(), 5, 5);
+                }
+                // Create a new task to draw the graph
+                Task<Void> drawGraphTask = new Task<>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        // Draw the TSP tour using black lines
+                        List<Integer> tour = tspTour.getTour();
+                        gc.setStroke(Color.BLACK);
+                        for(int i=0; i< tour.size()-1;i++){
+                            Node start = graph.getNode(tour.get(i));
+                            Node end = graph.getNode(tour.get(i+1));
+                            Thread.sleep(10);
+                            Platform.runLater(()-> {
+                                gc.strokeLine(start.getX(),start.getY(),end.getX(), end.getY());
+                            });
+                        }
+                        // Draw the two-opt tour using RED color
+                        gc.setStroke(Color.RED);
+                        tour = simTour.getTour();
+                        for(int i=0; i< tour.size()-1;i++){
+                            Node start = graph.getNode(tour.get(i));
+                            Node end = graph.getNode(tour.get(i+1));
+                            Thread.sleep(10);
+                            Platform.runLater(()-> {
+                                gc.strokeLine(start.getX(),start.getY(),end.getX(), end.getY());
+                            });
+                        }
+
+                        return null;
+                    }
+                };
+                Thread thread = new Thread(drawGraphTask);
+                thread.setDaemon(true);
+                thread.start();
+            });
+
             showThreeOptTour.setOnAction(event -> {
                 gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
                 gc.setFill(Color.BLACK);

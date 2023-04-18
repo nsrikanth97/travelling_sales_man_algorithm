@@ -23,18 +23,24 @@ public class RandomSwapping {
         double currentLength = tspTour.getLength();
         double bestLength = currentLength;
         List<Integer> currentTour = new ArrayList<>(tspTour.getTour());
+        boolean  improved  =true;
 
-        for (int i = 1; i < n - 1; i++) {
-            for (int j = i + 1; j < n; j++) {
-                swap(currentTour,i, j);
-                double newLength = tourLength(currentTour, g);
-                if (newLength < bestLength) {
-                    bestLength = newLength;
-                }else{
+        while(improved){
+            improved = false;
+            for (int i = 1; i < n - 1; i++) {
+                for (int j = i + 1; j < n; j++) {
                     swap(currentTour,i, j);
+                    double newLength = tourLength(currentTour, g);
+                    if (newLength < bestLength) {
+                        bestLength = newLength;
+                        improved = true;
+                    }else{
+                        swap(currentTour,i, j);
+                    }
                 }
             }
         }
+
 
         BufferedWriter bw = WriteDataToCSV.createBufferedWriter("random_swap_path.csv");
         for(int i = 0; i < currentTour.size()-1;i++){
