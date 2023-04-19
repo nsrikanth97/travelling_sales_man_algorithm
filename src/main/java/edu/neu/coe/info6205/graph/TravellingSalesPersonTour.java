@@ -77,6 +77,8 @@ public class TravellingSalesPersonTour {
         startPointY = g.getYPoint(start);
         visited[0] = true;
         List<Integer> tspTourList = new ArrayList<>();
+        StringBuilder sb2 = new StringBuilder();
+        sb2.append("[").append(g.getNode(start).getName()).append( " ---> ");
         tspTourList.add(start);
 
         int u = start;
@@ -99,6 +101,7 @@ public class TravellingSalesPersonTour {
                 sb.append(g.getDistanceBetweenPoints(u,v)*1000);
                 WriteDataToCSV.writeData(sb.toString(), bw);
                 tspTourList.add(v);
+                sb2.append(g.getNode(v).getName()).append( "-->");
                 double finalStartPointX = startPointX;
                 double finalStartPointY = startPointY;
                 double finalEndPointX = endPointX;
@@ -130,6 +133,7 @@ public class TravellingSalesPersonTour {
 
         System.out.printf("Time taken for TSP generation :  %d (ms)", timeEnd-timeStart);
         System.out.println();
+        System.out.println(sb2);
         tspTour.setTour(tspTourList);
         tspTour.setLength(tspWeight);
         return tspTour;

@@ -27,7 +27,7 @@ public class ReadDataFromCSV {
                 double x = longitudeToX(longitude, width);
                 double y = latitudeToY(latitude, height);
                 gc.fillOval(x,y, 5, 5);
-                graph.addNode(new Node(fields[0], latitude, longitude,x,y));
+                graph.addNode(new Node(fields[0].substring(fields[0].length()-5), latitude, longitude,x,y));
 
             }
 

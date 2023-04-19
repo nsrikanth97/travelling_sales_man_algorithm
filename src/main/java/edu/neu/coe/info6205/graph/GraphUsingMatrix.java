@@ -50,6 +50,11 @@ public class GraphUsingMatrix implements Graph {
         adjMatrix[v][u] = distance;
     }
 
+    public void addEdge(int u, int v, double weight) {
+        adjMatrix[u][v]  = weight;
+        adjMatrix[v][u] = weight;
+    }
+
     public Node getNode(int i) {
         return nodeList.get(i);
     }

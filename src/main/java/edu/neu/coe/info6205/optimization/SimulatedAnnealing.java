@@ -8,20 +8,30 @@ import edu.neu.coe.info6205.util.WriteDataToCSV;
 import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-public class TwoOpt {
+import static java.lang.Math.exp;
+import static java.lang.Math.random;
 
-    public static TspTour twoOpt(TspTour tspTour, Graph g) {
+public class SimulatedAnnealing {
+
+
+    public static TspTour simulatedAnnealing(TspTour tspTour, double temp, double r, Graph g) {
         long timeStart = System.currentTimeMillis();
         System.out.println();
-        System.out.printf("Two opt optimization started at %d", timeStart);
-        boolean improved = true;
+        System.out.printf("Simulated Annealing optimization started at %d", timeStart);
         List<Integer> tour = new ArrayList<>(tspTour.getTour());
-        int n = tour.size();
-        StringBuilder sb;
+        List<Integer> bestTour = new ArrayList<>(tspTour.getTour());
         double bestLength = tspTour.getLength();
-        while (improved) {
-            improved = false;
+        double currentLength = tspTour.getLength();
+        int n = tour.size();
+        boolean improved = true;
+        double delta;
+        Random random = new Random();
+        int iteration = 0;
+        int maxIteration = 1000;
+        while (iteration < maxIteration) {
+            iteration++;
             for (int i = 1; i < n - 3; i++) {
                 for (int j = i + 1; j < n - 2; j++) {
                     if (i == j - 1 || i == j) {
@@ -29,25 +39,31 @@ public class TwoOpt {
                     }
                     List<Integer> newTour = twoOptSwap(tour, i, j);
                     double newLength = tourLength(newTour, g);
-                    if (newLength < bestLength) {
-                        bestLength = newLength;
-                        improved = true;
+                    delta = newLength - currentLength;
+                    double temperature = temp / (1 + r * iteration);
+                    if (newLength < currentLength || acceptanceProbability(delta, temperature) > random.nextDouble()) {
+                        currentLength = newLength;
                         tour = newTour;
+                        if (newLength < bestLength) {
+                            bestLength = newLength;
+                            bestTour = newTour;
+                        }
                     }
                 }
             }
+            temp *= r;
         }
-
+        StringBuilder sb;
         StringBuilder sb2 = new StringBuilder();
         sb2.append("[");
-        BufferedWriter bw = WriteDataToCSV.createBufferedWriter("two_opt__path.csv");
+        BufferedWriter bw = WriteDataToCSV.createBufferedWriter("simulated_annealing_path.csv");
         Node end = null;
-        for (int i = 0; i < tour.size() - 1; i++) {
-            Node start = g.getNode(tour.get(i));
-            end = g.getNode(tour.get(i + 1));
+        for (int i = 0; i < bestTour.size() - 1; i++) {
+            Node start = g.getNode(bestTour.get(i));
+            end = g.getNode(bestTour.get(i + 1));
             sb = new StringBuilder("");
-            sb2.append(start.getName()).append("-->");
             sb.append(i + 1).append(",");
+            sb2.append(start.getName()).append("-->");
             sb.append(start.getPos()).append("(").append(start.getName()).append("),");
             sb.append(start.getLat()).append(",").append(start.getLong()).append(",");
             sb.append(end.getPos()).append("(").append(end.getName()).append("),");
@@ -58,16 +74,15 @@ public class TwoOpt {
         sb2.append(end.getName()).append("]");
         WriteDataToCSV.closeStream(bw);
         System.out.println();
-        System.out.printf("Length of tour after two opt : %f ", bestLength * 1000);
+        System.out.printf("Length of tour after Simulated Annealing : %f ", bestLength * 1000);
         System.out.println();
-        System.out.println("Details of the tour generated after two opt optimization can be found in the two_opt__path.csv file");
+        System.out.println("Details of the tour generated after Simulated annealing optimization can be found in the simulated_annealing_path.csv file");
         long timeEnd = System.currentTimeMillis();
-        System.out.printf("Two opt  generation Successfully completed  at %d(ms)", timeEnd);
+        System.out.printf("Simulated Annealing optimization Successfully completed  at %d(ms)", timeEnd);
         System.out.println();
         System.out.println(sb2);
-        System.out.printf("Time taken for Two Opt Optimization :  %d (ms)", timeEnd - timeStart);
-
-        return new TspTour(tour, bestLength);
+        System.out.printf("Time taken for Simulated Annealing Optimization :  %d (ms)", timeEnd - timeStart);
+        return new TspTour(bestTour, bestLength);
     }
 
     public static List<Integer> twoOptSwap(List<Integer> tour, int i, int j) {
@@ -92,6 +107,10 @@ public class TwoOpt {
             length += g.getDistanceBetweenPoints(tour.get(i),tour.get(i+1));
         }
         return length;
+    }
+
+    public static double acceptanceProbability(double delta, double T){
+        return exp(-delta/T);
     }
 
 
