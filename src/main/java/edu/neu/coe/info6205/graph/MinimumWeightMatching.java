@@ -57,6 +57,7 @@ public class MinimumWeightMatching {
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
+                if(gc!=null)
                 Platform.runLater(() -> {
                     gc.setStroke(Color.RED);
                     gc.strokeLine(startXPoint,startYPoint,endXPoint,endYPoint);

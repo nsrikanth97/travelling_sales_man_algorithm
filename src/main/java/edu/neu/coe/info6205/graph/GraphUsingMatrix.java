@@ -10,6 +10,10 @@ public class GraphUsingMatrix implements Graph {
     private int V;
     private List<Node> nodeList;
 
+    public void setOddDegreeNodes(List<Node> oddDegreeNodes) {
+        this.oddDegreeNodes = oddDegreeNodes;
+    }
+
     private List<Node> oddDegreeNodes;
     private double[][] adjMatrix;
 
@@ -132,6 +136,11 @@ public class GraphUsingMatrix implements Graph {
         }
     }
 
+    //added for junit
+    public void setDistanceBetweenPoints(int p1, int p2, double distance) {
+        adjMatrix[p1][p2] = distance;
+        adjMatrix[p2][p1] = distance; // assume undirected graph
+    }
     public List<Node> getNodeList(){
         return nodeList;
     }

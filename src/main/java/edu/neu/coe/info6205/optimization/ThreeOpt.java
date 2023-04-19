@@ -67,7 +67,7 @@ public class ThreeOpt {
         return bestTour;
     }
 
-    private static List<Integer> getNewTour(List<Integer> tour, int i, int j, int k) {
+    public static List<Integer> getNewTour(List<Integer> tour, int i, int j, int k) {
         List<Integer> newTour = new ArrayList<>();
         for (int x = 0; x <= i; x++) {
             newTour.add(tour.get(x));

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class TwoOpt {
 
-    public static TspTour twoOpt(TspTour tspTour, Graph g) {
+    public static TspTour twoOpt(TspTour tspTour, Graph g, boolean testCase) {
         long timeStart = System.currentTimeMillis();
         System.out.println();
         System.out.printf("Two opt optimization started at %d", timeStart);
@@ -37,10 +37,11 @@ public class TwoOpt {
                 }
             }
         }
+        if(!testCase){
 
         StringBuilder sb2 = new StringBuilder();
         sb2.append("[");
-        BufferedWriter bw = WriteDataToCSV.createBufferedWriter("two_opt__path.csv");
+    BufferedWriter bw = WriteDataToCSV.createBufferedWriter("two_opt__path.csv");
         Node end = null;
         for (int i = 0; i < tour.size() - 1; i++) {
             Node start = g.getNode(tour.get(i));
@@ -66,6 +67,8 @@ public class TwoOpt {
         System.out.println();
         System.out.println(sb2);
         System.out.printf("Time taken for Two Opt Optimization :  %d (ms)", timeEnd - timeStart);
+
+}
 
         return new TspTour(tour, bestLength);
     }

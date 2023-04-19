@@ -6,6 +6,9 @@ import edu.neu.coe.info6205.graph.*;
 import edu.neu.coe.info6205.optimization.*;
 //import edu.neu.coe.info6205.optimization.ThreeOpt;
 import edu.neu.coe.info6205.*;
+import edu.neu.coe.info6205.optimization.SimulatedAnnealing;
+import edu.neu.coe.info6205.optimization.ThreeOpt;
+import edu.neu.coe.info6205.optimization.TwoOpt;
 import edu.neu.coe.info6205.util.ReadDataFromCSV;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -92,12 +95,12 @@ public class Visualizer extends Application {
             Platform.runLater(() -> {
                 label3.setText("Percentage difference :" + ((tspTourL / lengthOfMst) - 1) * 100);
             });
-
-            TspTour randomSwapping = RandomSwapping.randomSwapping(tspTour,graph);
+            TspTour randomSwapping = RandomSwapping.randomSwapping(tspTour,graph,false);
             System.out.println("Length of Random swapping : " + randomSwapping.getLength()*1000);
-            TspTour twoOptTour = TwoOpt.twoOpt(tspTour,graph);
+
+            TspTour twoOptTour = TwoOpt.twoOpt(tspTour,graph, false);
             System.out.println("Two opt : " + twoOptTour.getLength());
-            TspTour threeOptTour = ThreeOpt.threeOpt(tspTour,graph,false);
+            TspTour threeOptTour = ThreeOpt.threeOpt(tspTour,graph, false);
             System.out.println("Three opt : " + threeOptTour.getLength());
             TspTour simTour = SimulatedAnnealing.simulatedAnnealing(tspTour,100, 0.99,graph);
             System.out.println("Sim opt : " + simTour.getLength());
@@ -235,6 +238,7 @@ public class Visualizer extends Application {
                 thread.setDaemon(true);
                 thread.start();
             });
+
             showThreeOptTour.setOnAction(event -> {
                 gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
                 gc.setFill(Color.BLACK);

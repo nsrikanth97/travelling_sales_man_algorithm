@@ -13,7 +13,7 @@ import java.util.Random;
 public class RandomSwapping {
 
 
-    public static TspTour randomSwapping(TspTour tspTour, Graph g) {
+    public static TspTour randomSwapping(TspTour tspTour, Graph g, boolean testCase) {
         long timeStart = System.currentTimeMillis();
         System.out.println();
         StringBuilder sb;
@@ -23,23 +23,24 @@ public class RandomSwapping {
         double currentLength = tspTour.getLength();
         double bestLength = currentLength;
         List<Integer> currentTour = new ArrayList<>(tspTour.getTour());
-        boolean improved = true;
+        boolean  improved  =true;
 
-        while (improved) {
+        while(improved){
             improved = false;
             for (int i = 1; i < n - 1; i++) {
                 for (int j = i + 1; j < n; j++) {
-                    swap(currentTour, i, j);
+                    swap(currentTour,i, j);
                     double newLength = tourLength(currentTour, g);
                     if (newLength < bestLength) {
                         bestLength = newLength;
                         improved = true;
-                    } else {
-                        swap(currentTour, i, j);
+                    }else{
+                        swap(currentTour,i, j);
                     }
                 }
             }
         }
+    if(!testCase){
 
         StringBuilder sb2 = new StringBuilder();
         sb2.append("[");
@@ -70,6 +71,10 @@ public class RandomSwapping {
 
         System.out.printf("Time taken for Random swap Optimization :  %d (ms)", timeEnd - timeStart);
         System.out.println(sb2);
+    }
+
+
+
         // Return the best tour found
         return new TspTour(currentTour, bestLength);
     }
