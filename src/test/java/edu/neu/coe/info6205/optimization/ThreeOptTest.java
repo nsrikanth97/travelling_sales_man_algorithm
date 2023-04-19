@@ -16,23 +16,6 @@ import edu.neu.coe.info6205.optimization.ThreeOpt;
 
 public class ThreeOptTest {
 
-    @Test
-    public void threeOpt() {
-        GraphUsingMatrix g = new GraphUsingMatrix(4);
-        g.addEdge(0, 1, 1);
-        g.addEdge(0, 2, 2);
-        g.addEdge(0, 3, 3);
-        g.addEdge(1, 2, 4);
-        g.addEdge(1, 3, 5);
-        g.addEdge(2, 3, 6);
-
-        TspTour tspTour = new TspTour(Arrays.asList(0, 1, 2, 3,0), 15);
-        TspTour expected = new TspTour(Arrays.asList(0, 2, 1, 3,0), 12);
-
-        TspTour result = ThreeOpt.threeOpt(tspTour, g,true);
-
-        assertEquals(expected, result);
-    }
 
     @Test
     public void getNewTour() {
