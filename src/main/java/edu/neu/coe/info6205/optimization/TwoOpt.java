@@ -11,7 +11,7 @@ import java.util.List;
 
 public class TwoOpt {
 
-    public static TspTour twoOpt(TspTour tspTour, Graph g) {
+    public static TspTour twoOpt(TspTour tspTour, Graph g, boolean testCase) {
         long timeStart = System.currentTimeMillis();
         System.out.println();
         System.out.printf("Two opt optimization started at %d", timeStart);
@@ -37,30 +37,32 @@ public class TwoOpt {
                 }
             }
         }
+        if(!testCase){
+    BufferedWriter bw = WriteDataToCSV.createBufferedWriter("two_opt__path.csv");
+    for(int i = 0; i < tour.size()-1;i++){
+        Node start = g.getNode(tour.get(i));
+        Node end = g.getNode(tour.get(i+1));
+        sb = new StringBuilder("");
+        sb.append(i+1).append(",");
+        sb.append(start.getPos()).append("(").append(start.getName()).append("),");
+        sb.append(start.getLat()).append(",").append(start.getLong()).append(",");
+        sb.append(end.getPos()).append("(").append(end.getName()).append("),");
+        sb.append(end.getLat()).append(",").append(end.getLong()).append(",");
+        sb.append(g.getDistanceBetweenPoints(start.getPos(),end.getPos())*1000);
+        WriteDataToCSV.writeData(sb.toString(), bw);
+    }
+    WriteDataToCSV.closeStream(bw);
+    System.out.println();
+    System.out.printf("Length of tour after two opt : %f ",bestLength*1000);
+    System.out.println();
+    System.out.println("Details of the tour generated after two opt optimization can be found in the two_opt__path.csv file");
+    long timeEnd = System.currentTimeMillis();
+    System.out.printf("Two opt  generation Successfully completed  at %d(ms)", timeEnd);
+    System.out.println();
 
-        BufferedWriter bw = WriteDataToCSV.createBufferedWriter("two_opt__path.csv");
-        for(int i = 0; i < tour.size()-1;i++){
-            Node start = g.getNode(tour.get(i));
-            Node end = g.getNode(tour.get(i+1));
-            sb = new StringBuilder("");
-            sb.append(i+1).append(",");
-            sb.append(start.getPos()).append("(").append(start.getName()).append("),");
-            sb.append(start.getLat()).append(",").append(start.getLong()).append(",");
-            sb.append(end.getPos()).append("(").append(end.getName()).append("),");
-            sb.append(end.getLat()).append(",").append(end.getLong()).append(",");
-            sb.append(g.getDistanceBetweenPoints(start.getPos(),end.getPos())*1000);
-            WriteDataToCSV.writeData(sb.toString(), bw);
-        }
-        WriteDataToCSV.closeStream(bw);
-        System.out.println();
-        System.out.printf("Length of tour after two opt : %f ",bestLength*1000);
-        System.out.println();
-        System.out.println("Details of the tour generated after two opt optimization can be found in the two_opt__path.csv file");
-        long timeEnd = System.currentTimeMillis();
-        System.out.printf("Two opt  generation Successfully completed  at %d(ms)", timeEnd);
-        System.out.println();
+    System.out.printf("Time taken for Two Opt Optimization :  %d (ms)", timeEnd-timeStart);
 
-        System.out.printf("Time taken for Two Opt Optimization :  %d (ms)", timeEnd-timeStart);
+}
 
         return new TspTour(tour, bestLength);
     }

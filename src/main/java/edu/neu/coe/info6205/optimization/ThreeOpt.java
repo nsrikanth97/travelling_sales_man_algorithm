@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ThreeOpt {
-    public static TspTour threeOpt(TspTour tspTour, Graph g) {
+    public static TspTour threeOpt(TspTour tspTour, Graph g, boolean testCase) {
         long timeStart = System.currentTimeMillis();
         System.out.println();
         System.out.printf("Three opt optimization started at %d", timeStart);
@@ -32,34 +32,37 @@ public class ThreeOpt {
                 }
             }
         }
-        BufferedWriter bw = WriteDataToCSV.createBufferedWriter("three_opt_path.csv");
-        for(int i = 0; i < bestTour.getTour().size()-1;i++){
-            Node start = g.getNode(bestTour.getTour().get(i));
-            Node end = g.getNode(bestTour.getTour().get(i+1));
-            sb = new StringBuilder("");
-            sb.append(i+1).append(",");
-            sb.append(start.getPos()).append("(").append(start.getName()).append("),");
-            sb.append(start.getLat()).append(",").append(start.getLong()).append(",");
-            sb.append(end.getPos()).append("(").append(end.getName()).append("),");
-            sb.append(end.getLat()).append(",").append(end.getLong()).append(",");
-            sb.append(g.getDistanceBetweenPoints(start.getPos(),end.getPos()));
-            WriteDataToCSV.writeData(sb.toString(), bw);
-        }
-        WriteDataToCSV.closeStream(bw);
-        System.out.println();
-        System.out.printf("Length of tour after three opt : %f ",bestTour.getLength()*1000);
-        System.out.println();
-        System.out.println("Details of the tour generated after three opt optimization can be found in the three_opt_path.csv file");
-        long timeEnd = System.currentTimeMillis();
-        System.out.printf("Three opt  optimization completed Successfully completed  at %d(ms)", timeEnd);
-        System.out.println();
+        if(!testCase){
+            BufferedWriter bw = WriteDataToCSV.createBufferedWriter("three_opt_path.csv");
+            for(int i = 0; i < bestTour.getTour().size()-1;i++){
+                Node start = g.getNode(bestTour.getTour().get(i));
+                Node end = g.getNode(bestTour.getTour().get(i+1));
+                sb = new StringBuilder("");
+                sb.append(i+1).append(",");
+                sb.append(start.getPos()).append("(").append(start.getName()).append("),");
+                sb.append(start.getLat()).append(",").append(start.getLong()).append(",");
+                sb.append(end.getPos()).append("(").append(end.getName()).append("),");
+                sb.append(end.getLat()).append(",").append(end.getLong()).append(",");
+                sb.append(g.getDistanceBetweenPoints(start.getPos(),end.getPos()));
+                WriteDataToCSV.writeData(sb.toString(), bw);
+            }
+            WriteDataToCSV.closeStream(bw);
+            System.out.println();
+            System.out.printf("Length of tour after three opt : %f ",bestTour.getLength()*1000);
+            System.out.println();
+            System.out.println("Details of the tour generated after three opt optimization can be found in the three_opt_path.csv file");
+            long timeEnd = System.currentTimeMillis();
+            System.out.printf("Three opt  optimization completed Successfully completed  at %d(ms)", timeEnd);
+            System.out.println();
 
-        System.out.printf("Time taken for Two Opt Optimization :  %d (ms)", timeEnd-timeStart);
-        System.out.println();
+            System.out.printf("Time taken for Two Opt Optimization :  %d (ms)", timeEnd-timeStart);
+            System.out.println();
+        }
+
         return bestTour;
     }
 
-    private static List<Integer> getNewTour(List<Integer> tour, int i, int j, int k) {
+    public static List<Integer> getNewTour(List<Integer> tour, int i, int j, int k) {
         List<Integer> newTour = new ArrayList<>();
         for (int x = 0; x <= i; x++) {
             newTour.add(tour.get(x));

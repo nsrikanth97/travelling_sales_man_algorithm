@@ -94,12 +94,12 @@ public class Visualizer extends Application {
             Platform.runLater(() -> {
                 label3.setText("Percentage difference :" + ((tspTourL / lengthOfMst) - 1) * 100);
             });
-            TspTour randomSwapping = RandomSwapping.randomSwapping(tspTour,graph);
+            TspTour randomSwapping = RandomSwapping.randomSwapping(tspTour,graph,false);
             System.out.println("Length of Random swapping : " + randomSwapping.getLength()*1000);
 
-            TspTour twoOptTour = TwoOpt.twoOpt(tspTour,graph);
+            TspTour twoOptTour = TwoOpt.twoOpt(tspTour,graph, false);
             System.out.println("Two opt : " + twoOptTour.getLength());
-            TspTour threeOptTour = ThreeOpt.threeOpt(tspTour,graph);
+            TspTour threeOptTour = ThreeOpt.threeOpt(tspTour,graph, false);
             System.out.println("Three opt : " + threeOptTour.getLength());
             TspTour simTour = SimulatedAnnealing.simulatedAnnealing(tspTour,100, 0.99,graph);
             System.out.println("Sim opt : " + simTour.getLength());
