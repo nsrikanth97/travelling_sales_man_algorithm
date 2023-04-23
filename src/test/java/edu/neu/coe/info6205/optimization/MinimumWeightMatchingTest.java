@@ -51,7 +51,7 @@ public class MinimumWeightMatchingTest {
 
     @Test
     public void testFindMinimumWeightMatching() {
-        List<Edge> matching = MinimumWeightMatching.findMinimumWeightMatching(graph, gc);
+        List<Edge> matching = MinimumWeightMatching.findMinimumWeightMatching(graph, null);
         assertNotNull(matching);
         assertEquals(3, matching.size());
     }
@@ -59,7 +59,7 @@ public class MinimumWeightMatchingTest {
     @Test
     public void testFindMinimumWeightMatchingWithNoNodes() {
         GraphUsingMatrix emptyGraph = new GraphUsingMatrix(4);
-        List<Edge> matching = MinimumWeightMatching.findMinimumWeightMatching(emptyGraph, gc);
+        List<Edge> matching = MinimumWeightMatching.findMinimumWeightMatching(emptyGraph, null);
         assertNotNull(matching);
         assertTrue(matching.isEmpty());
     }
@@ -69,7 +69,7 @@ public class MinimumWeightMatchingTest {
         List<Node> oneNodeList = new ArrayList<>();
         oneNodeList.add(new Node(null, 0, 0, 0, 0));
         GraphUsingMatrix oneNodeGraph = new GraphUsingMatrix(4);
-        List<Edge> matching = MinimumWeightMatching.findMinimumWeightMatching(oneNodeGraph, gc);
+        List<Edge> matching = MinimumWeightMatching.findMinimumWeightMatching(oneNodeGraph, null);
         assertNotNull(matching);
         assertTrue(matching.isEmpty());
     }

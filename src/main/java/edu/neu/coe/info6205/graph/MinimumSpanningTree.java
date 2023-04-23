@@ -7,8 +7,10 @@ import edu.neu.coe.info6205.util.WriteDataToCSV;
 import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-
+import javafx.scene.shape.Line;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +20,7 @@ import java.util.Queue;
 
 public class MinimumSpanningTree {
 
-    public static double generateMST(Graph g, int S, GraphicsContext gc, Label label){
+    public static double generateMST(Graph g, int S, Pane root, Label label){
         long timeStart = System.currentTimeMillis();
         System.out.printf("MST generation Started at %d", timeStart);
         Queue<Edge> queue = new PriorityQueue<>((o1, o2) -> Double.compare(o1.getWeight(), o2.getWeight()));
@@ -58,7 +60,6 @@ public class MinimumSpanningTree {
             double endXPoint = end.getX();
             double endYPoint = end.getY();
             Edge finalEdge = edge;
-
             sb = new StringBuilder("");
             sb.append(mst.size()).append(",");
             sb.append(edge.getU()).append("(").append(start.getName()).append("),");
@@ -67,30 +68,30 @@ public class MinimumSpanningTree {
             sb.append(end.getLat()).append(",").append(end.getLong()).append(",");
             sb.append(edge.getWeight()*1000);
             WriteDataToCSV.writeData(sb.toString(),bw);
-            if(null != gc){
-            Platform.runLater(() -> {
-
-                gc.strokeLine(startXPoint,startYPoint,endXPoint,endYPoint);
+            if(null != root){
+                Edge finalEdge1 = edge;
+                Platform.runLater(() -> {
+                Line line = new Line(startXPoint, startYPoint, endXPoint, endYPoint);
+                line.setStrokeWidth(1.5);
+                Tooltip tooltip = new Tooltip(start.getName() + " " + finalEdge1.getWeight() + " " +  end.getName());
+                Tooltip.install(line, tooltip);
+                root.getChildren().add(line);
                 label.setText("Length of MST tour : " + finalMstWeight*1000);
                 if(degreeS%2 != 0){
-                    gc.setFill(Color.RED);
-                    gc.fillOval(startXPoint, startYPoint, 5, 5);
+                    g.getNode(finalEdge.getU()).getOval().setFill(Color.RED);
                     start.setPos(finalEdge.getU());
                     g.addNodeToOddDegreeList(start);
                 }else{
-                    gc.setFill(Color.BLACK);
-                    gc.fillOval(startXPoint, startYPoint, 5, 5);
+                    g.getNode(finalEdge.getU()).getOval().setFill(Color.BLACK);
                     start.setPos(finalEdge.getU());
                     g.removeNodeFromOddDegreeList(start);
                 }
                 if(degreeE%2 != 0){
-                    gc.setFill(Color.RED);
-                    gc.fillOval(endXPoint, endYPoint, 5, 5);
+                    g.getNode(finalEdge.getV()).getOval().setFill(Color.RED);
                     end.setPos(finalEdge.getV());
                     g.addNodeToOddDegreeList(end);
                 }else{
-                    gc.setFill(Color.BLACK);
-                    gc.fillOval(startXPoint, startYPoint, 5, 5);
+                    g.getNode(finalEdge.getV()).getOval().setFill(Color.BLACK);
                     end.setPos(finalEdge.getV());
                     g.removeNodeFromOddDegreeList(end);
                 }

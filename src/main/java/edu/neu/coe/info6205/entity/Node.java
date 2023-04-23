@@ -1,5 +1,7 @@
 package edu.neu.coe.info6205.entity;
 
+import javafx.scene.shape.Circle;
+
 public class Node {
 
     private String name;
@@ -23,6 +25,17 @@ public class Node {
 
     private int degree;
 
+    public Circle getOval() {
+        return oval;
+    }
+
+    public void setOval(Circle oval) {
+        this.oval = oval;
+    }
+
+    Circle oval;
+
+
 
 
     public Node(double lat, double lon){
@@ -38,6 +51,16 @@ public class Node {
         this.x = x;
         this.y = y;
         this.degree = 0;
+    }
+
+    public Node(String name, double lat, double lon, double x, double y,Circle oval){
+        this.lat = lat;
+        this.lon = lon;
+        this.name= name;
+        this.x = x;
+        this.y = y;
+        this.degree = 0;
+        this.oval = oval;
     }
 
     public String getName() {

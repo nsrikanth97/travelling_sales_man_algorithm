@@ -5,19 +5,24 @@ package edu.neu.coe.info6205.util;
 import edu.neu.coe.info6205.entity.Node;
 import edu.neu.coe.info6205.graph.Graph;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Tooltip;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 
 import java.io.*;
 public class ReadDataFromCSV {
 
 
-    public static Graph readData(String fileName, Graph graph,GraphicsContext gc,  double width, double height) {
+    public static Graph readData(String fileName, Graph graph, Pane root, double width, double height) {
         try {
             InputStream inputStream = ReadDataFromCSV.class.getResourceAsStream(fileName);
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
             String line;
             reader.readLine();
+            Circle oval;
             int i = 0;
             while ((line = reader.readLine()) != null && i <  graph.getSize()) {
                 String[] fields = line.split(",");
@@ -26,8 +31,11 @@ public class ReadDataFromCSV {
                 double latitude = Double.parseDouble(fields[2]);
                 double x = longitudeToX(longitude, width);
                 double y = latitudeToY(latitude, height);
-                gc.fillOval(x,y, 5, 5);
-                graph.addNode(new Node(fields[0].substring(fields[0].length()-5), latitude, longitude,x,y));
+                oval = new Circle(x, y, 2);
+                Tooltip tooltip = new Tooltip(fields[0].substring(fields[0].length()-5));
+                Tooltip.install(oval, tooltip);
+                root.getChildren().add(oval);
+                graph.addNode(new Node(fields[0].substring(fields[0].length()-5), latitude, longitude,x,y,oval));
 
             }
 

@@ -4,16 +4,19 @@ import edu.neu.coe.info6205.entity.Edge;
 import edu.neu.coe.info6205.entity.Node;
 import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Tooltip;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Line;
 
 public class MinimumWeightMatching {
 
-    public static List<Edge> findMinimumWeightMatching(Graph g,GraphicsContext gc) {
+    public static List<Edge> findMinimumWeightMatching(Graph g,Pane root) {
         List<Node> points = g.getOddDegreeList();
         PriorityQueue<Edge> edgeQueue = new PriorityQueue<>(Comparator.comparingDouble(Edge::getWeight));
         boolean[] matched = new boolean[g.getSize()];
@@ -57,10 +60,14 @@ public class MinimumWeightMatching {
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
-                if(gc!=null)
+                if(root!=null)
                 Platform.runLater(() -> {
-                    gc.setStroke(Color.RED);
-                    gc.strokeLine(startXPoint,startYPoint,endXPoint,endYPoint);
+                    Line line = new Line(startXPoint, startYPoint, endXPoint, endYPoint);
+                    line.setStroke(Color.RED);
+                    line.setStrokeWidth(1.5);
+                    Tooltip tooltip = new Tooltip(start.getName() + " " + g.getDistanceBetweenPoints(start.getPos(), end.getPos()) + " " +  end.getName());
+                    Tooltip.install(line, tooltip);
+                    root.getChildren().add(line);
                 });
 
             }

@@ -19,8 +19,10 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -80,7 +82,7 @@ public class Visualizer extends Application {
 
         Graph graph = new GraphUsingMatrix(585);
 
-        ReadDataFromCSV.readData("/info6205.spring2023.teamproject.csv", graph, gc, width, height);
+        ReadDataFromCSV.readData("/info6205.spring2023.teamproject.csv", graph, root, width, height);
         graph.addAllEdges();
         Timer timer = new Timer(1000, null);
         timer.addActionListener((e) -> {
@@ -88,9 +90,9 @@ public class Visualizer extends Application {
             showRandomSwappingTour.setDisable(true);
             showThreeOptTour.setDisable(true);
             showSATour.setDisable(true);
-            double lengthOfMst = MinimumSpanningTree.generateMST(graph, 0, gc, label);
-            MinimumWeightMatching.findMinimumWeightMatching(graph, gc);
-            TspTour tspTour = TravellingSalesPersonTour.findTravellingSalesPersonTour(graph,0,gc,label2);
+            double lengthOfMst = MinimumSpanningTree.generateMST(graph, 0, root, label);
+            MinimumWeightMatching.findMinimumWeightMatching(graph, root);
+            TspTour tspTour = TravellingSalesPersonTour.findTravellingSalesPersonTour(graph,0,root,label2);
             double tspTourL = tspTour.getLength();
             Platform.runLater(() -> {
                 label3.setText("Percentage difference :" + ((tspTourL / lengthOfMst) - 1) * 100);
@@ -128,9 +130,15 @@ public class Visualizer extends Application {
                         for(int i=0; i< tour.size()-1;i++){
                             Node start = graph.getNode(tour.get(i));
                             Node end = graph.getNode(tour.get(i+1));
-                            Thread.sleep(10);
+                            Thread.sleep(5);
+                            int finalI = i;
                             Platform.runLater(()-> {
-                                gc.strokeLine(start.getX(),start.getY(),end.getX(), end.getY());
+                                Line line = new Line(start.getX(), start.getY(), end.getX(), end.getY());
+                                line.setStrokeWidth(1.5);
+                                line.setStroke(Color.BLACK);
+                                Tooltip tooltip = new Tooltip(start.getName() + " " + graph.getDistanceBetweenPoints(finalI,finalI+1) + " " +  end.getName());
+                                Tooltip.install(line, tooltip);
+                                root.getChildren().add(line);
                             });
                         }
                         // Draw the two-opt tour using RED color
@@ -139,12 +147,17 @@ public class Visualizer extends Application {
                         for(int i=0; i< tour.size()-1;i++){
                             Node start = graph.getNode(tour.get(i));
                             Node end = graph.getNode(tour.get(i+1));
-                            Thread.sleep(10);
+                            Thread.sleep(5);
+                            int finalI = i;
                             Platform.runLater(()-> {
-                                gc.strokeLine(start.getX(),start.getY(),end.getX(), end.getY());
+                                Line line = new Line(start.getX(), start.getY(), end.getX(), end.getY());
+                                line.setStrokeWidth(1.5);
+                                line.setStroke(Color.BLACK);
+                                Tooltip tooltip = new Tooltip(start.getName() + " " + graph.getDistanceBetweenPoints(finalI,finalI+1) + " " +  end.getName());
+                                Tooltip.install(line, tooltip);
+                                root.getChildren().add(line);
                             });
                         }
-
                         return null;
                     }
                 };
@@ -171,9 +184,15 @@ public class Visualizer extends Application {
                         for(int i=0; i< tour.size()-1;i++){
                             Node start = graph.getNode(tour.get(i));
                             Node end = graph.getNode(tour.get(i+1));
-                            Thread.sleep(10);
+                            Thread.sleep(5);
+                            int finalI = i;
                             Platform.runLater(()-> {
-                                gc.strokeLine(start.getX(),start.getY(),end.getX(), end.getY());
+                                Line line = new Line(start.getX(), start.getY(), end.getX(), end.getY());
+                                line.setStrokeWidth(1.5);
+                                line.setStroke(Color.BLACK);
+                                Tooltip tooltip = new Tooltip(start.getName() + " " + graph.getDistanceBetweenPoints(finalI,finalI+1) + " " +  end.getName());
+                                Tooltip.install(line, tooltip);
+                                root.getChildren().add(line);
                             });
                         }
                         // Draw the two-opt tour using RED color
@@ -182,9 +201,15 @@ public class Visualizer extends Application {
                         for(int i=0; i< tour.size()-1;i++){
                             Node start = graph.getNode(tour.get(i));
                             Node end = graph.getNode(tour.get(i+1));
-                            Thread.sleep(10);
+                            Thread.sleep(5);
+                            int finalI = i;
                             Platform.runLater(()-> {
-                                gc.strokeLine(start.getX(),start.getY(),end.getX(), end.getY());
+                                Line line = new Line(start.getX(), start.getY(), end.getX(), end.getY());
+                                line.setStrokeWidth(1.5);
+                                line.setStroke(Color.BLACK);
+                                Tooltip tooltip = new Tooltip(start.getName() + " " + graph.getDistanceBetweenPoints(finalI,finalI+1) + " " +  end.getName());
+                                Tooltip.install(line, tooltip);
+                                root.getChildren().add(line);
                             });
                         }
 
@@ -214,9 +239,15 @@ public class Visualizer extends Application {
                         for(int i=0; i< tour.size()-1;i++){
                             Node start = graph.getNode(tour.get(i));
                             Node end = graph.getNode(tour.get(i+1));
-                            Thread.sleep(10);
+                            Thread.sleep(5);
+                            int finalI = i;
                             Platform.runLater(()-> {
-                                gc.strokeLine(start.getX(),start.getY(),end.getX(), end.getY());
+                                Line line = new Line(start.getX(), start.getY(), end.getX(), end.getY());
+                                line.setStrokeWidth(1.5);
+                                line.setStroke(Color.BLACK);
+                                Tooltip tooltip = new Tooltip(start.getName() + " " + graph.getDistanceBetweenPoints(finalI,finalI+1) + " " +  end.getName());
+                                Tooltip.install(line, tooltip);
+                                root.getChildren().add(line);
                             });
                         }
                         // Draw the two-opt tour using RED color
@@ -226,8 +257,14 @@ public class Visualizer extends Application {
                             Node start = graph.getNode(tour.get(i));
                             Node end = graph.getNode(tour.get(i+1));
                             Thread.sleep(10);
+                            int finalI = i;
                             Platform.runLater(()-> {
-                                gc.strokeLine(start.getX(),start.getY(),end.getX(), end.getY());
+                                Line line = new Line(start.getX(), start.getY(), end.getX(), end.getY());
+                                line.setStrokeWidth(1.5);
+                                line.setStroke(Color.BLACK);
+                                Tooltip tooltip = new Tooltip(start.getName() + " " + graph.getDistanceBetweenPoints(finalI,finalI+1) + " " +  end.getName());
+                                Tooltip.install(line, tooltip);
+                                root.getChildren().add(line);
                             });
                         }
 
@@ -259,8 +296,14 @@ public class Visualizer extends Application {
                             Node start = graph.getNode(tour.get(i));
                             Node end = graph.getNode(tour.get(i+1));
                             Thread.sleep(10);
+                            int finalI = i;
                             Platform.runLater(()-> {
-                                gc.strokeLine(start.getX(),start.getY(),end.getX(), end.getY());
+                                Line line = new Line(start.getX(), start.getY(), end.getX(), end.getY());
+                                line.setStrokeWidth(1.5);
+                                line.setStroke(Color.BLACK);
+                                Tooltip tooltip = new Tooltip(start.getName() + " " + graph.getDistanceBetweenPoints(finalI,finalI+1) + " " +  end.getName());
+                                Tooltip.install(line, tooltip);
+                                root.getChildren().add(line);
                             });
                         }
                         // Draw the two-opt tour using RED color
@@ -270,8 +313,14 @@ public class Visualizer extends Application {
                             Node start = graph.getNode(tour.get(i));
                             Node end = graph.getNode(tour.get(i+1));
                             Thread.sleep(10);
+                            int finalI = i;
                             Platform.runLater(()-> {
-                                gc.strokeLine(start.getX(),start.getY(),end.getX(), end.getY());
+                                Line line = new Line(start.getX(), start.getY(), end.getX(), end.getY());
+                                line.setStrokeWidth(1.5);
+                                line.setStroke(Color.BLACK);
+                                Tooltip tooltip = new Tooltip(start.getName() + " " + graph.getDistanceBetweenPoints(finalI,finalI+1) + " " +  end.getName());
+                                Tooltip.install(line, tooltip);
+                                root.getChildren().add(line);
                             });
                         }
 

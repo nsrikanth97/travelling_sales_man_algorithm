@@ -6,14 +6,17 @@ import edu.neu.coe.info6205.util.WriteDataToCSV;
 import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 
 import java.io.BufferedWriter;
 import java.util.*;
 
 public class TravellingSalesPersonTour {
 
-    public static TspTour findTravellingSalesPersonTour(Graph g, int start, GraphicsContext gc, Label l) {
+    public static TspTour findTravellingSalesPersonTour(Graph g, int start, Pane root, Label l) {
         long timeStart = System.currentTimeMillis();
         System.out.println();
         System.out.printf("TSP generation using Christofides Started at %d", timeStart);
@@ -56,9 +59,10 @@ public class TravellingSalesPersonTour {
                     double finalEndPointY = endPointY;
 
                     Platform.runLater(() -> {
-                        gc.setStroke(Color.BLUE);
-                        gc.strokeLine(finalStartPointX, finalStartPointY, finalEndPointX, finalEndPointY);
-
+                        Line line = new Line(finalStartPointX, finalStartPointY, finalEndPointX, finalEndPointY);
+                        line.setStroke(Color.BLUE);
+                        line.setStrokeWidth(1.5);
+                        root.getChildren().add(line);
                     });
                     startPointX = endPointX;
                     startPointY = endPointY;
@@ -112,9 +116,15 @@ public class TravellingSalesPersonTour {
                     ex.printStackTrace();
                 }
                 double finalTspWeight = tspWeight;
+                int finalU = u;
+                int finalV = v;
                 Platform.runLater(() -> {
-                    gc.setStroke(Color.BLACK);
-                    gc.strokeLine(finalStartPointX, finalStartPointY, finalEndPointX, finalEndPointY);
+                    Line line = new Line(finalStartPointX, finalStartPointY, finalEndPointX, finalEndPointY);
+                    line.setStroke(Color.BLACK);
+                    line.setStrokeWidth(1.5);
+                    Tooltip tooltip = new Tooltip(startNode.getName() + " " + g.getDistanceBetweenPoints(finalU, finalV) + " " +  endnode.getName());
+                    Tooltip.install(line, tooltip);
+                    root.getChildren().add(line);
                     l.setText("Christofides  tour length (Black Line):" + finalTspWeight *1000);
                 });
                 startPointX = endPointX;
